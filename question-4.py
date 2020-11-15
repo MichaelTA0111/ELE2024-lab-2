@@ -116,7 +116,7 @@ plt.plot(G_theta_t_out, G_theta_y_out)
 plt.grid()
 plt.xlabel('Time (s)')
 plt.ylabel('Rod Angle (rad)')
-plt.savefig('figures\\question_3_a.svg', format='svg')  # Save the graph as a .svg file
+plt.savefig('figures\\question_4_a.svg', format='svg')  # Save the graph as a .svg file
 plt.show()
 
 # Plot the horizontal position against time using the results from G_x
@@ -124,5 +124,5 @@ plt.plot(G_x_t_out, G_x_y_out)
 plt.grid()
 plt.xlabel('Time (s)')
 plt.ylabel('x position (m)')
-plt.savefig('figures\\question_3_b.svg', format='svg')  # Save the graph as a .svg file
+plt.savefig('figures\\question_4_b.svg', format='svg')  # Save the graph as a .svg file
 plt.show()
