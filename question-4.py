@@ -1,5 +1,8 @@
+import numpy as np
 import sympy as sym
-from sympy import inverse_laplace_transform as ilt
+import control as ctrl
+from control import TransferFunction as Tf
+import matplotlib.pyplot as plt
 
 
 def evaluate_at_equilibrium(f):
@@ -10,6 +13,19 @@ def evaluate_at_equilibrium(f):
     :return: The function f after evaluation at an equilibrium point (F0, x30, x40)
     """
     return f.subs([(F, F0), (x3, x30), (x4, x40)])
+
+def pid(kp, ki, kd):
+    """
+    This function constructs the transfer function of a PID controller with given parameters
+    :param kp: The continuous-time gain for the proportional controller
+    :param ki: The continuous-time gain for the integral controller
+    :param kd: The continuous-time gain for the differential controller
+    :return: The transfer function for the PID controller
+    """
+    diff = Tf([1, 0], 1)
+    intgr = Tf(1, [1, 0])
+    pid_tf = kp + kd * diff + ki * intgr
+    return pid_tf
 
 # Linearisation
 #
@@ -73,38 +89,52 @@ b = -phi_deriv_x3_at_equilibrium
 c = -psi_deriv_F_at_equilibrium
 d = psi_deriv_x3_at_equilibrium
 
-# Define symbols to store the partial derivatives as coefficients
-a, b, c, d = sym.symbols('a:d', real=True, positive=True)
+# Define the values for constants M, m, l, and g
+M_value = 0.3
+m_value = 0.1
+l_value = 0.35
+g_value = 9.81
+
+# Define the values for a, b, c, and d
+a_value = float(a.subs([(M, M_value), (m, m_value)]))
+b_value = float(b.subs([(M, M_value), (m, m_value), (g, g_value)]))
+c_value = float(c.subs([(M, M_value), (m, m_value), (g, g_value), (l, l_value)]))
+d_value = float(d.subs([(M, M_value), (m, m_value), (g, g_value), (l, l_value)]))
+
+# Declare variables for helping to draw the graph
+num_points = 1000  # The resolution of the graph
+dt = 0.2  # Time t ranges between 0 and 0.2 seconds
+t_span = np.linspace(0, dt, num_points)
+
+# Define the input signal for the system
+input_signal = np.sin(100 * t_span**2)
+
+# Define the arrays of coefficients for the transfer functions G_theta and G_x
+G_theta_num_coeffs = [c_value]
+G_theta_denom_coeffs = [-1, 0, d_value]
+G_x_num_coeffs = [-a_value, 0, a_value * d_value - b_value * c_value]
+G_x_denom_coeffs = [-1, 0, d_value, 0, 0]
 
 # Define the transfer functions G_theta and G_x
-G_theta = c / (d - s**2)
-G_x = (a * d - a * s**2 - b * c) / (d * s**2 - s**4)
+G_theta = Tf(G_theta_num_coeffs, G_theta_denom_coeffs)
+G_x = Tf(G_x_num_coeffs, G_x_denom_coeffs)
 
-# Define F in the s domain for impulse, step, and frequency response
-F_s_impulse = 1
-F_s_step = 1 / s
-F_s_frequency = w / (s**2 + w**2)
+# Determine the response of the system
+G_theta_t_out, G_theta_y_out, G_theta_x_out = ctrl.forced_response(G_theta, t_span, input_signal)
+G_x_t_out, G_x_y_out, G_x_x_out = ctrl.forced_response(G_x, t_span, input_signal)
 
-# Define the impulse, step, and frequency responses for X3_s and X1_s (s domain)
-X3_s_impulse = G_theta * F_s_impulse
-X3_s_step = G_theta * F_s_step
-X3_s_frequency = G_theta * F_s_frequency
-X1_s_impulse = G_x * F_s_impulse
-X1_s_step = G_x * F_s_step
-X1_s_frequency = G_x * F_s_frequency
+# Plot the rod angle against time using the results from G_theta
+plt.plot(G_theta_t_out, G_theta_y_out)
+plt.grid()
+plt.xlabel('Time (s)')
+plt.ylabel('Rod Angle (rad)')
+plt.savefig('figures\\question_3_a.svg', format='svg')  # Save the graph as a .svg file
+plt.show()
 
-# Define the impulse, step, and frequency responses for x3_t and x1_t (t domain)
-x3_t_impulse = ilt(X3_s_impulse, s, t)
-x3_t_step = ilt(X3_s_step, s, t)
-# x3_t_frequency = ilt(X3_s_frequency, s, t, w)
-x1_t_impulse = ilt(X1_s_impulse, s, t)
-x1_t_step = ilt(X1_s_step, s, t)
-# x1_t_frequency = ilt(X1_s_frequency, s, t, w)
-
-# Pretty print all of the calculated responses in the t domain
-sym.pprint(x3_t_impulse.simplify())
-sym.pprint(x3_t_step.simplify())
-# sym.pprint(x3_t_frequency.simplify())
-sym.pprint(x1_t_impulse.simplify())
-sym.pprint(x1_t_step.simplify())
-# sym.pprint(x1_t_frequency.simplify())
+# Plot the horizontal position against time using the results from G_x
+plt.plot(G_x_t_out, G_x_y_out)
+plt.grid()
+plt.xlabel('Time (s)')
+plt.ylabel('x position (m)')
+plt.savefig('figures\\question_3_b.svg', format='svg')  # Save the graph as a .svg file
+plt.show()

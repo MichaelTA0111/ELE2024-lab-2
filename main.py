@@ -55,7 +55,13 @@ G_theta = ctrl.TransferFunction(num_coeffs, denom_coeffs)
 
 
 def pid(kp, ki, kd):
-    # This function constructs the transfer function of a PID controller with given parameters
+    """
+    This function constructs the transfer function of a PID controller with given parameters
+    :param kp: The continuous-time gain for the proportional controller
+    :param ki: The continuous-time gain for the integral controller
+    :param kd: The continuous-time gain for the differential controller
+    :return:
+    """
     diff = ctrl.TransferFunction([1, 0], 1)
     intgr = ctrl.TransferFunction(1, [1, 0])
     pid_tf = kp + kd * diff + ki * intgr
