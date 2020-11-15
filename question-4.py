@@ -14,18 +14,6 @@ def evaluate_at_equilibrium(f):
     """
     return f.subs([(F, F0), (x3, x30), (x4, x40)])
 
-def pid(kp, ki, kd):
-    """
-    This function constructs the transfer function of a PID controller with given parameters
-    :param kp: The continuous-time gain for the proportional controller
-    :param ki: The continuous-time gain for the integral controller
-    :param kd: The continuous-time gain for the differential controller
-    :return: The transfer function for the PID controller
-    """
-    diff = Tf([1, 0], 1)
-    intgr = Tf(1, [1, 0])
-    pid_tf = kp + kd * diff + ki * intgr
-    return pid_tf
 
 # Linearisation
 #
@@ -53,7 +41,7 @@ phi /= 4 * (M + m) - 3 * m * sym.cos(x3) ** 2  # Denominator
 
 # Define ψ (psi) according to equation 3.2b
 psi = m * l * x4 ** 2 * sym.sin(x3) * sym.cos(x3) + F * sym.cos(x3) - (M + m) * g * sym.sin(x3)  # Numerator
-psi /= (4 * (M + m) - 3 * m * sym.cos(x3)**2) * l  # Denominator
+psi /= (4 * (M + m) - 3 * m * sym.cos(x3) ** 2) * l  # Denominator
 psi *= -3  # Multiplier of the fraction
 
 # Determine the partial derivatives of φ (phi) wrt F, x3, x4
@@ -107,7 +95,7 @@ dt = 0.2  # Time t ranges between 0 and 0.2 seconds
 t_span = np.linspace(0, dt, num_points)
 
 # Define the input signal for the system
-input_signal = np.sin(100 * t_span**2)
+input_signal = np.sin(100 * t_span ** 2)
 
 # Define the arrays of coefficients for the transfer functions G_theta and G_x
 G_theta_num_coeffs = [c_value]
