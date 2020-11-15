@@ -2,6 +2,7 @@ import sympy as sym
 import control as ctrl
 import matplotlib.pyplot as plt
 
+
 # Linearisation
 # φ(F, x3, x4) ~ φ(F0, x30, x40) + (dφ/dF)(F0, x30, x40) * (F - F0)
 #                                + (dφ/dx3)(F0, x30, x40) * (x3 - x30)
