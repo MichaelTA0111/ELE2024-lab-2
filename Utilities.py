@@ -3,9 +3,9 @@ from control import TransferFunction as Tf
 
 class Utilities:
     """
-    Some information about the class here.
-    Import using 'from Utilities.Utilities import evaluate_at_equilibrirum, pid'
+    Class to define static methods which are used in multiple questions
     """
+
     @staticmethod
     def evaluate_at_equilibrium(f, F, F0, x3, x30, x4, x40):
         """
@@ -21,7 +21,6 @@ class Utilities:
         :return: The function f after evaluation at an equilibrium point (F0, x30, x40)
         """
         return f.subs([(F, F0), (x3, x30), (x4, x40)])
-
 
     @staticmethod
     def pid(kp, ki, kd):
