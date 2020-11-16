@@ -96,15 +96,23 @@ X1_s_frequency = G_x * F_s_frequency
 # Define the impulse, step, and frequency responses for x3_t and x1_t (t domain)
 x3_t_impulse = ilt(X3_s_impulse, s, t)
 x3_t_step = ilt(X3_s_step, s, t)
-# x3_t_frequency = ilt(X3_s_frequency, s, t, w)
+x3_t_frequency = ilt(X3_s_frequency, s, t, w)
 x1_t_impulse = ilt(X1_s_impulse, s, t)
 x1_t_step = ilt(X1_s_step, s, t)
-# x1_t_frequency = ilt(X1_s_frequency, s, t, w)
+x1_t_frequency = ilt(X1_s_frequency, s, t, w)
 
 # Pretty print all of the calculated responses in the t domain
 sym.pprint(x3_t_impulse.simplify())
 sym.pprint(x3_t_step.simplify())
-# sym.pprint(x3_t_frequency.simplify())
+sym.pprint(x3_t_frequency.simplify())
 sym.pprint(x1_t_impulse.simplify())
 sym.pprint(x1_t_step.simplify())
-# sym.pprint(x1_t_frequency.simplify())
+sym.pprint(x1_t_frequency.simplify())
+
+# Print the equations again in LaTeX format
+print(sym.latex(x3_t_impulse.simplify()))
+print(sym.latex(x3_t_step.simplify()))
+print(sym.latex(x3_t_frequency.simplify()))
+print(sym.latex(x1_t_impulse.simplify()))
+print(sym.latex(x1_t_step.simplify()))
+print(sym.latex(x1_t_frequency.simplify()))
