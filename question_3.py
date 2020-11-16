@@ -1,4 +1,4 @@
-from system import System
+from System import System
 import sympy as sym
 from sympy import inverse_laplace_transform as ilt
 

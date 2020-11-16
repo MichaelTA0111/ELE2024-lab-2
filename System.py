@@ -1,6 +1,8 @@
 import sympy as sym
-from utilities import evaluate_at_equilibrium as ev_eq
+from Utilities import Utilities
 from control import TransferFunction as Tf
+
+ev_eq = Utilities.evaluate_at_equilibrium
 
 
 class System:

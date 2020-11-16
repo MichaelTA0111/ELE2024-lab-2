@@ -1,6 +1,6 @@
-from system import System
+from System import System
 import numpy as np
-from utilities import pid
+from Utilities import Utilities
 import control as ctrl
 from control import impulse_response as ir
 import matplotlib.pyplot as plt
@@ -14,7 +14,7 @@ dt = 1  # Time t ranges between 0 and 1 seconds
 my_kp = 150
 my_ki = 0.5
 my_kd = 10
-my_pid = -pid(my_kp, my_ki, my_kd)
+my_pid = -Utilities.pid(my_kp, my_ki, my_kd)
 
 # Use closed loop feedback to combine the PID controller with the System
 tf_theta = ctrl.feedback(System.G_theta, my_pid)

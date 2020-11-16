@@ -1,4 +1,4 @@
-from system import System
+from System import System
 import numpy as np
 import control as ctrl
 import matplotlib.pyplot as plt
