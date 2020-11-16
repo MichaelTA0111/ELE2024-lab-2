@@ -1,4 +1,4 @@
-import main
+from system import System
 import numpy as np
 from utilities import pid
 import control as ctrl
@@ -16,8 +16,8 @@ my_ki = 0.5
 my_kd = 10
 my_pid = -pid(my_kp, my_ki, my_kd)
 
-# Use closed loop feedback to combine the PID controller with the system
-tf_theta = ctrl.feedback(main.G_theta, my_pid)
+# Use closed loop feedback to combine the PID controller with the System
+tf_theta = ctrl.feedback(System.G_theta, my_pid)
 t_imp, theta_imp = ir(tf_theta, T=np.linspace(0, dt, num_points))
 theta_imp_deg = np.rad2deg(theta_imp)
 

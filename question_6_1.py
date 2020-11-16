@@ -1,4 +1,4 @@
-import main
+from system import System
 import numpy as np
 from utilities import pid
 import control as ctrl
@@ -16,8 +16,8 @@ my_ki = 0.5
 my_kd = 10
 my_pid = -pid(my_kp, my_ki, my_kd)
 
-# Use closed loop feedback to combine the PID controller with the system
-tf_x = ctrl.feedback(main.G_x, my_pid)
+# Use closed loop feedback to combine the PID controller with the System
+tf_x = ctrl.feedback(System.G_x, my_pid)
 t_imp, x_imp = ir(tf_x, T=np.linspace(0, dt, num_points))
 
 # Plot the rod angle against time using the results from G_theta
